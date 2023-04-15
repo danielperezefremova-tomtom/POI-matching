@@ -1,3 +1,5 @@
+run_id: ${run_id}
+
 columns_map:
   name_1:
     name: name_1
@@ -9,7 +11,7 @@ columns_map:
     name: latitude_1
     type: float
   longitude_1:
-    name: latitude_1
+    name: longitude_1
     type: float
   name_2:
     name: name_2

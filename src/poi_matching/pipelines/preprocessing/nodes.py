@@ -3,6 +3,7 @@ from poi_matching.utils.similarity import SimilarityModel
 import pandas as pd
 import numpy as np
 import logging 
+from pyspark.sql.functions import *
 
 log = logging.getLogger(__name__)
 
@@ -40,11 +41,10 @@ def make_features(df:pd.DataFrame, parameters: dict)->pd.DataFrame:
     return df[columns_to_keep]
 
 def transform_to_matching_datamodel(df, parameters):
-
-    df = df.select(parameters['columns_map'].keys())
     
-    for column in parameters['columns_map'].keys():
-        new_column, new_type = parameters['columns_map'][column]
-        df = df.withColumnRenamed(column, new_column).cast(new_type)
+    for column, new_column in parameters['columns_map'].items():
+        df = df.withColumnRenamed(column, new_column['name']) \
+                .withColumn(new_column['name'], col(new_column['name']).cast(new_column['type']))
 
+    df = df.withColumn('run_id', lit(parameters['run_id']))
     return df
