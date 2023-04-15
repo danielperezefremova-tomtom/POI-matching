@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  poi_matching:
+    build:
+      context: .
+      dockerfile: environment/Dockerfile
+      #network: "host"
+    tty: true
+    user: vscode
+    #network_mode: "host"

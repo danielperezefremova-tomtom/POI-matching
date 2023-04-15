@@ -1,0 +1,7 @@
+version: '3.8'
+services:
+  poi_matching:
+    volumes:
+      - .:/workspace:cached
+    command: bash -c "sleep 10 && git config --global --add safe.directory /workspace && jupyter lab --ip='*' --NotebookApp.token='tomtom' --allow-root --port=8000"
+
