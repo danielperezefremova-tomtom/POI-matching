@@ -1,0 +1,30 @@
+matching_result:
+  type: pandas.CSVDataSet
+  filepath: data/01_raw/matching-20230331-0002.csv
+  load_args:
+    sep: ","
+
+features:
+  type: pandas.CSVDataSet
+  filepath: data/02_intermediate/features.csv
+
+foursquare_data:
+  type: spark.SparkDataSet
+  file_format: parquet
+  filepath: data/01_raw/four_square/pairs.parquet
+  load_args:
+    header: True
+    inferSchema: True
+
+foursquare_data_dm:
+  type: spark.SparkDataSet
+  file_format: parquet
+  filepath: data/01_raw/four_square/foursquare_data_dm.parquet
+  load_args:
+    header: True
+    inferSchema: True
+  save_args:
+    header: True
+    mode: overwrite
+    partitionBy: ["run_id"]
+    mergeSchema: True

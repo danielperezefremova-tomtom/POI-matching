@@ -1,0 +1,3 @@
+spark.jars.packages: org.apache.hadoop:hadoop-azure:3.3.1,org.apache.hadoop:hadoop-client:3.3.1,com.microsoft.azure:azure-storage:8.6.6,io.delta:delta-core_2.12:2.2.0
+spark.driver.bindAddress: 127.0.0.1
+spark.driver.host: localhost

@@ -1,0 +1,25 @@
+columns_map:
+  name_1:
+    name: name_1
+    type: string
+  categories_1:
+    name: categories_1
+    type: string
+  latitude_1:
+    name: latitude_1
+    type: float
+  longitude_1:
+    name: latitude_1
+    type: float
+  name_2:
+    name: name_2
+    type: string
+  categories_2:
+    name: categories_2
+    type: string
+  latitude_2:
+    name: latitude_2
+    type: float
+  longitude_2:
+    name: longitude_2
+    type: float
