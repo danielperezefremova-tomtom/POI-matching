@@ -1,14 +1,53 @@
-black~=22.0
+Jinja2<3.1.0
+apache-sedona==1.3.1
+black~=22.1.0
+bs4~=0.0.1
+country_converter==0.8.0
+docutils==0.19
 flake8>=3.7.9, <5.0
-ipython>=7.31.1, <8.0; python_version < '3.8'
-ipython~=8.10; python_version >= '3.8'
+flexpolyline~=0.1.0
+folium==0.12.1.post1
+freezegun==1.2.2
+fsspec==2022.11.0
+furo==2022.12.7
+fuzzywuzzy==0.18.0
+geoalchemy2~=0.12.3
+geopandas~=0.10.2
+ipykernel==6.20.2
+ipython>=7.31.1, <8.0
 isort~=5.0
+# jupyterlab~=3.0
 jupyter~=1.0
-jupyterlab_server>=2.11.1, <2.16.0
-jupyterlab~=3.0, <3.6.0
-kedro~=0.18.7
 kedro-telemetry~=0.2.0
+kedro-viz~=5.1.1
+kedro==0.18.6
+kedro[pandas.CSVDataSet, pandas.ExcelDataSet, pandas.ParquetDataSet, plotly.PlotlyDataSet, plotly.JSONDataSet, spark.SparkDataSet]==0.18.6
+mock==4.0.3
+nbsphinx==0.8.12
 nbstripout~=0.4
+numpy >= 1.20.3
+pandas==1.5.3
+pathlib==1.0.1
+plotnine~=0.9.0
+polyline~=1.4.0
+pyproj~=3.3.0
+pyspark==3.1.2
 pytest-cov~=3.0
-pytest-mock>=1.7.1, <2.0
-pytest~=7.2
+pytest-mock>=1.7.1, <2.07
+pytest~=6.2
+requests-unixsocket==0.2.0
+scikit-learn~=1.1.2
+shapely~=1.8.0
+sphinx-autodoc-typehints==1.21.8
+sphinx_copybutton==0.5.1
+sqlalchemy~=1.4.41
+tqdm~=4.64.0
+typing==3.7.4.3
+unidecode==1.3.6
+uuid~=1.30
+azure-identity==1.12.0
+azure-keyvault-secrets==4.7.0
+transformers==4.26.0
+sentence-transformers==2.2.2
+google-search-results==2.4.1
+haversine==2.7.0

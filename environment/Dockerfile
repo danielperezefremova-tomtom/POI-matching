@@ -13,8 +13,14 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 
 EXPOSE 8000
-
 RUN sudo apt update && sudo apt-get install -y git
 RUN git config --global --add safe.directory /workspace
+
+COPY /src/requirements.in /tmp/requirements.in
+RUN pip install pip-tools  \
+    && pip-compile --resolver legacy /tmp/requirements.in > /tmp/requirements.txt \
+    && pip install -r /tmp/requirements.txt \
+    && pip install -U ipykernel
+
 
 USER $USERNAME
