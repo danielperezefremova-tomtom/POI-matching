@@ -1,7 +1,8 @@
 run_id: ${run_id}
 
+text_features: ['name_1', 'name_2', 'categories_1', 'categories_2']
+
 stopwords:
-  columns: ['name_1', 'name_2', 'categories_1', 'categories_2']
   languages: ['arabic', 'azerbaijani', 'bengali', 'catalan', 'chinese',
               'croatian', 'danish', 'dutch', 'english', 'finnish', 'french',
               'german', 'greek', 'hebrew', 'hindi', 'hungarian', 'indonesian',
@@ -9,3 +10,10 @@ stopwords:
               'persian', 'polish', 'portuguese', 'romanian', 'russian', 'sinhala',
               'spanish', 'swedish', 'tagalog', 'tamil', 'tatar', 'telugu', 'thai',
               'turkish', 'ukrainian', 'urdu', 'vietnamese']
+
+  additional_stopwords: []
+
+
+
+
+  

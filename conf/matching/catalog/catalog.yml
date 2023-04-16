@@ -28,3 +28,16 @@ foursquare_data_dm:
     mode: overwrite
     partitionBy: ["run_id"]
     mergeSchema: True
+
+foursquare_data_rm_stopwords_on_names:
+  type: spark.SparkDataSet
+  file_format: parquet
+  filepath: data/01_raw/four_square/foursquare_data_rm_stopwords_on_names.parquet
+  load_args:
+    header: True
+    inferSchema: True
+  save_args:
+    header: True
+    mode: overwrite
+    partitionBy: ["run_id"]
+    mergeSchema: True
