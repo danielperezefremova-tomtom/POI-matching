@@ -7,5 +7,11 @@
 	],
 
 	"service": "poi_matching",
-	"workspaceFolder": "/workspace"
+	"workspaceFolder": "/workspace", 
+	"extensions": [
+		"mhutchie.git-graph",
+		"ms-python.python",
+		"njpwerner.autodocstring",
+		"perkovec.emoji"
+	]
 }

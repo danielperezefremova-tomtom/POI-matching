@@ -1,5 +1,3 @@
-run_id: ${run_id}
-
 columns_map:
   name_1:
     name: name_1
@@ -25,3 +23,12 @@ columns_map:
   longitude_2:
     name: longitude_2
     type: float
+  match:
+    name: match
+    type: integer
+  id_1:
+    name: id_1
+    type: string
+  id_2:
+    name: id_2
+    type: string

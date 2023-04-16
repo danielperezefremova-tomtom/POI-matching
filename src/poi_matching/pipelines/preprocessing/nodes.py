@@ -4,6 +4,10 @@ import pandas as pd
 import numpy as np
 import logging 
 from pyspark.sql.functions import *
+import pyspark 
+import advertools as adv
+from functools import reduce
+
 
 log = logging.getLogger(__name__)
 
@@ -40,7 +44,9 @@ def make_features(df:pd.DataFrame, parameters: dict)->pd.DataFrame:
 
     return df[columns_to_keep]
 
-def transform_to_matching_datamodel(df, parameters):
+def transform_to_matching_datamodel(df: pyspark.sql.DataFrame,
+                                     parameters: dict):
+    
     
     for column, new_column in parameters['columns_map'].items():
         df = df.withColumnRenamed(column, new_column['name']) \
@@ -48,3 +54,17 @@ def transform_to_matching_datamodel(df, parameters):
 
     df = df.withColumn('run_id', lit(parameters['run_id']))
     return df
+
+def generate_bag_of_stopwords(list_of_languages: list):
+    
+    stopwords_dictionary = {language: adv.stopwords[language] for language in list_of_languages}
+    bag_of_stopwords = reduce(lambda x,y: x+y, stopwords_dictionary.values())
+
+    return bag_of_stopwords
+
+def remove_stopwords(df: pyspark.sql.DataFrame, parameters: dict):
+
+    stopwords = generate_bag_of_stopwords(parameters['stopwords']['languages'])
+
+
+    return stopwords
