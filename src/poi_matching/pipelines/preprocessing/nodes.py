@@ -5,7 +5,13 @@ from poi_matching.utils.text_preprocessing import remove_emoji
 import pandas as pd
 import numpy as np
 import logging 
-from pyspark.sql.functions import col, lower, lit, split, array_join, translate, udf
+from pyspark.sql.functions import (col,
+                                    explode,
+                                    lit,
+                                    array_join,
+                                    translate,
+                                    udf,
+                                    split)
 import pyspark 
 import advertools as adv
 from functools import reduce
@@ -69,7 +75,7 @@ def remove_punctuation_and_special_chars_on_names(df: pyspark.sql.DataFrame,
     return df
 
 def remove_emoji_patterns(df: pyspark.sql.DataFrame, parameters: dict) -> pyspark.sql.DataFrame:
-    
+
     if parameters['columns_to_remove_emojis']:
         udf_remove_emojis = udf(remove_emoji)
         for column in parameters['columns_to_remove_emojis']:
@@ -141,8 +147,27 @@ def remove_stopwords_on_names(df: pyspark.sql.DataFrame,
                                             pattern=' ')
     return df_processed
 
+def explode_categories(df: pyspark.sql.DataFrame,
+                     parameters: dict) -> pyspark.sql.DataFrame:
+    
+    columns = ['categories_1', 'categories_2']
+    new_columns = ['category_1', 'category_2']
+    columns_map = list(zip(columns, new_columns))
 
+    #TODO: Address the split of categories more general
+    for column in columns:
+        df = df.withColumn(column, split(col(column), ', '))
 
+    for column, alias in columns_map:
+        df = df.withColumn(alias, explode(col(column)))
+    
+    return df
 
+def select_columns(df: pyspark.sql.DataFrame,
+                     parameters: dict) -> pyspark.sql.DataFrame:
+    
+    colums_to_keep = parameters['preprocessing_output_columns']
+    df_selected = df.select(*colums_to_keep)
 
+    return df_selected
 

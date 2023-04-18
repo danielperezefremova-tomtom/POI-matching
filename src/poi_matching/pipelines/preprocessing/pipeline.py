@@ -1,7 +1,10 @@
 from kedro.pipeline import Pipeline, node, pipeline
 from .nodes import  (transform_to_matching_datamodel,
                     remove_punctuation_and_special_chars_on_names,
-                    remove_emoji_patterns)
+                    remove_emoji_patterns,
+                    explode_categories,
+                    select_columns
+                    )
 
 
 
@@ -11,21 +14,33 @@ def create_pipeline(**kwargs) -> Pipeline:
         [
             node(
                 func=transform_to_matching_datamodel,
-                inputs=["foursquare_data", "parameters"],
-                outputs="foursquare_data_dm",
+                inputs=["df_input", "parameters"],
+                outputs="df_transformed_to_data_model",
                 name="transform_to_matching_datamodel",
             ),
             node(
                 func=remove_punctuation_and_special_chars_on_names,
-                inputs=["foursquare_data_dm", "parameters"],
-                outputs="foursquare_data_rm_special_chars",
+                inputs=["df_transformed_to_data_model", "parameters"],
+                outputs="df_rm_special_chars",
                 name="remove_punctuation_and_special_chars_on_names",
             ),
             node(
                 func=remove_emoji_patterns,
-                inputs=["foursquare_data_rm_special_chars", "parameters"],
-                outputs="foursquare_data_rm_emojis",
+                inputs=["df_rm_special_chars", "parameters"],
+                outputs="df_rm_emojis",
                 name="remove_emoji_patterns",
+            ),
+            node(
+                func=explode_categories,
+                inputs=["df_rm_emojis", "parameters"],
+                outputs="df_explode_categories",
+                name="explode_categories",
+            ),
+            node(
+                func=select_columns,
+                inputs=["df_explode_categories", "parameters"],
+                outputs="df_preprocessed",
+                name="select_columns",
             )
         ]
     )

@@ -15,7 +15,6 @@ stopwords:
 
 columns_to_remove_emojis: ['name_1', 'name_2', 'categories_1', 'categories_2']
 
-
-
+preprocessing_output_columns: ['run_id', 'name_1', 'name_2', 'category_1', 'category_2', 'latitude_1', 'longitude_1', 'latitude_2', 'longitude_2']
 
   

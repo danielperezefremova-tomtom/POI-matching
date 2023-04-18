@@ -8,7 +8,7 @@ features:
   type: pandas.CSVDataSet
   filepath: data/02_intermediate/features.csv
 
-foursquare_data:
+df_input:
   type: spark.SparkDataSet
   file_format: parquet
   filepath: data/01_raw/four_square/pairs.parquet
@@ -16,23 +16,10 @@ foursquare_data:
     header: True
     inferSchema: True
 
-foursquare_data_dm:
+df_preprocessed:
   type: spark.SparkDataSet
   file_format: parquet
-  filepath: data/01_raw/four_square/foursquare_data_dm.parquet
-  load_args:
-    header: True
-    inferSchema: True
-  save_args:
-    header: True
-    mode: overwrite
-    partitionBy: ["run_id"]
-    mergeSchema: True
-
-foursquare_data_rm_emojis:
-  type: spark.SparkDataSet
-  file_format: parquet
-  filepath: data/01_raw/four_square/foursquare_data_rm_emojis.parquet
+  filepath: data/01_raw/four_square/foursquare_data_preprocessed.parquet
   load_args:
     header: True
     inferSchema: True
