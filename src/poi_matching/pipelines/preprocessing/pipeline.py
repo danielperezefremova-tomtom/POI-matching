@@ -1,7 +1,7 @@
 from kedro.pipeline import Pipeline, node, pipeline
-from .nodes import  transform_to_matching_datamodel, \
-                    remove_stopwords_on_names, \
-                    remove_punctuation_and_special_chars_on_names
+from .nodes import  (transform_to_matching_datamodel,
+                    remove_punctuation_and_special_chars_on_names,
+                    remove_emoji_patterns)
 
 
 
@@ -22,10 +22,10 @@ def create_pipeline(**kwargs) -> Pipeline:
                 name="remove_punctuation_and_special_chars_on_names",
             ),
             node(
-                func=remove_stopwords_on_names,
+                func=remove_emoji_patterns,
                 inputs=["foursquare_data_rm_special_chars", "parameters"],
-                outputs="foursquare_data_rm_stopwords_on_names",
-                name="remove_stopwords_on_names",
-            ),
+                outputs="foursquare_data_rm_emojis",
+                name="remove_punctuation_and_special_chars_on_names",
+            )
         ]
     )
