@@ -1,7 +1,7 @@
 import re 
 
 
-def remove_emoji(string: str) -> str:
+def remove_emoji(string):
     """Remove emojis from text
 
     Args:
@@ -30,5 +30,9 @@ def remove_emoji(string: str) -> str:
                                u"\ufe0f"  # dingbats
                                u"\u3030"
                                "]+", flags=re.UNICODE)
-    return emoji_pattern.sub(r'', string)
+    
+    if string:
+        return emoji_pattern.sub(r'', string)
+    else:
+        return None
 

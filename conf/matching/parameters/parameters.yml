@@ -1,4 +1,4 @@
-run_id: ${run_id}
+run_id: prototype-1
 
 text_features: ['name_1', 'name_2', 'categories_1', 'categories_2']
 
@@ -12,6 +12,8 @@ stopwords:
               'turkish', 'ukrainian', 'urdu', 'vietnamese']
 
   additional_stopwords: []
+
+columns_to_remove_emojis: ['name_1', 'name_2', 'categories_1', 'categories_2']
 
 
 

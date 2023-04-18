@@ -25,7 +25,7 @@ def create_pipeline(**kwargs) -> Pipeline:
                 func=remove_emoji_patterns,
                 inputs=["foursquare_data_rm_special_chars", "parameters"],
                 outputs="foursquare_data_rm_emojis",
-                name="remove_punctuation_and_special_chars_on_names",
+                name="remove_emoji_patterns",
             )
         ]
     )

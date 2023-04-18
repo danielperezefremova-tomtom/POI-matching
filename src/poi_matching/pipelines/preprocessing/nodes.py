@@ -5,7 +5,7 @@ from poi_matching.utils.text_preprocessing import remove_emoji
 import pandas as pd
 import numpy as np
 import logging 
-from pyspark.sql.functions import col, lower, lit, split, array_join, translate
+from pyspark.sql.functions import col, lower, lit, split, array_join, translate, udf
 import pyspark 
 import advertools as adv
 from functools import reduce
@@ -68,12 +68,14 @@ def remove_punctuation_and_special_chars_on_names(df: pyspark.sql.DataFrame,
 
     return df
 
-def remove_emoji_patterns(df: pyspark.sql.DataFrame, columns:list=['name_1', 'name_2', 'categories_1', 'categories_2']) -> pyspark.sql.DataFrame:
-
-    udf_remove_emojis = udf(remove_emoji)
-    for column in columns:
-        df = df.withColumn(column, udf_remove_emojis(col(column)))
-    return 1
+def remove_emoji_patterns(df: pyspark.sql.DataFrame, parameters: dict) -> pyspark.sql.DataFrame:
+    
+    if parameters['columns_to_remove_emojis']:
+        udf_remove_emojis = udf(remove_emoji)
+        for column in parameters['columns_to_remove_emojis']:
+            df = df.withColumn(column, udf_remove_emojis(col(column)))
+    
+    return df
 
 def transform_array_to_string(df: pyspark.sql.DataFrame,
                             input_columns:list,
