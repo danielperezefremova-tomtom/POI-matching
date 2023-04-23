@@ -13,8 +13,13 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 
 EXPOSE 8000
-RUN sudo apt update && sudo apt-get install -y git
+RUN sudo apt update && sudo apt-get install -y git && sudo apt-get -y install python3.8-venv
 RUN git config --global --add safe.directory /workspace
+
+ENV VIRTUAL_ENV=/opt/venv
+RUN python3 -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+ENV PIP_DEFAULT_TIMEOUT=100
 
 COPY /src/requirements.in /tmp/requirements.in
 RUN pip install pip-tools  \

@@ -4,7 +4,7 @@ import numpy as np
 import torch
 from sentence_transformers import SentenceTransformer
 
-log = logging.getLogger("search_logs")
+log = logging.getLogger(__name__)
 
 MODEL_NAME = "paraphrase-multilingual-MiniLM-L12-v2"
 
@@ -21,6 +21,10 @@ class SimilarityModel:
                 "Please provide a valid model available in SentenceTransformer pretrained models"
             )
 
+        if torch.cuda.is_available():
+            print('Cuda device available')
+        else:
+            print('No cuda device available')
         # Instantiate the client and replace with your endpoint.
         self.model = model
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

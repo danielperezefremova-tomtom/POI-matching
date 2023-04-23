@@ -1,0 +1,47 @@
+fit_predict_result:
+  type: spark.SparkDataSet
+  file_format: parquet
+  filepath: data/07_model_output/cat_model_predict_result.parquet
+  load_args:
+    header: True
+    inferSchema: True
+  save_args:
+    header: True
+    mode: overwrite
+    mergeSchema: True
+
+trained_model:
+  type: spark.SparkDataSet
+  file_format: parquet
+  filepath: data/06_models/cat_model_trained.parquet
+  load_args:
+    header: True
+    inferSchema: True
+  save_args:
+    header: True
+    mode: overwrite
+    mergeSchema: True
+
+df_train:
+  type: spark.SparkDataSet
+  file_format: csv
+  filepath: data/02_intermediate/categories_google_TT.csv
+  load_args:
+    header: True
+    inferSchema: True
+  save_args:
+    header: True
+    mode: overwrite
+    mergeSchema: True
+
+df_features:
+  type: spark.SparkDataSet
+  file_format: parquet
+  filepath: data/04_feature/cat_model_features.parquet
+  load_args:
+    header: True
+    inferSchema: True
+  save_args:
+    header: True
+    mode: overwrite
+    mergeSchema: True

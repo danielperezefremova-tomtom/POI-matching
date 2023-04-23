@@ -16,5 +16,6 @@ def register_pipelines() -> Dict[str, Pipeline]:
 
     
     return {
-        'preprocess_matching_pairs': preprocess_matching_pairs
+        'preprocess_matching_pairs': preprocess_matching_pairs,
+        'train_category_model': train_category_model()
     }

@@ -1,0 +1,15 @@
+cat_model:
+  input_col: subcategory_name
+  label_col: category_id
+  embeding:
+    batch_size: 32
+    model_name: paraphrase-multilingual-MiniLM-L12-v2
+  clf_params: # pyspark.ml.classification.RandomForestClassifier
+    featuresCol: features
+    labelCol: label
+    maxDepth: 10
+    numTrees: 100
+    seed: 0
+
+
+  

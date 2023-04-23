@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: environment/Dockerfile
-      #network: "host"
+      network: "host"
     tty: true
     user: vscode
-    #network_mode: "host"
+    network_mode: "host"
