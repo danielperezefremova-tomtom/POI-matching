@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 import logging 
 from pyspark.sql.functions import (col,
+                                    trim,
                                     explode,
                                     lit,
                                     array_join,
@@ -70,7 +71,8 @@ def remove_punctuation_and_special_chars_on_names(df: pyspark.sql.DataFrame,
                                         parameters: dict) -> pyspark.sql.DataFrame:
 
     for column in ['name_1', 'name_2']:
-        df=df.withColumn(column, translate(column, SPECIAL_CHARS, ''))
+        df=df.withColumn(column, translate(column, SPECIAL_CHARS, '')) \
+             .withColumn(column, trim(column))              
 
     return df
 
@@ -170,4 +172,10 @@ def select_columns(df: pyspark.sql.DataFrame,
     df_selected = df.select(*colums_to_keep)
 
     return df_selected
+
+def filter_by_country(df: pyspark.sql.DataFrame,
+                     parameters: dict) -> pyspark.sql.DataFrame:
+    
+
+    return df.filter((col('country_1').isin(parameters['filter_country'])) | (col('country_2').isin(parameters['filter_country'])))
 

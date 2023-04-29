@@ -28,3 +28,16 @@ df_preprocessed:
     mode: overwrite
     partitionBy: ["run_id"]
     mergeSchema: True
+
+df_location_features:
+  type: spark.SparkDataSet
+  file_format: parquet
+  filepath: data/04_feature/four_square/df_location_features.parquet
+  load_args:
+    header: True
+    inferSchema: True
+  save_args:
+    header: True
+    mode: overwrite
+    partitionBy: ["run_id"]
+    mergeSchema: True

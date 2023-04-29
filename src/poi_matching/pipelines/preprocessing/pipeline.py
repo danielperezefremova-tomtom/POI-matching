@@ -3,7 +3,8 @@ from .nodes import  (transform_to_matching_datamodel,
                     remove_punctuation_and_special_chars_on_names,
                     remove_emoji_patterns,
                     explode_categories,
-                    select_columns
+                    select_columns,
+                    filter_by_country
                     )
 
 
@@ -19,8 +20,14 @@ def create_pipeline(**kwargs) -> Pipeline:
                 name="transform_to_matching_datamodel",
             ),
             node(
-                func=remove_punctuation_and_special_chars_on_names,
+                func=filter_by_country,
                 inputs=["df_transformed_to_data_model", "parameters"],
+                outputs="df_filtered",
+                name="filter_by_country",
+            ),
+            node(
+                func=remove_punctuation_and_special_chars_on_names,
+                inputs=["df_filtered", "parameters"],
                 outputs="df_rm_special_chars",
                 name="remove_punctuation_and_special_chars_on_names",
             ),

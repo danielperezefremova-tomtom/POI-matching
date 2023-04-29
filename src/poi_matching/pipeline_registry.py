@@ -13,9 +13,11 @@ def register_pipelines() -> Dict[str, Pipeline]:
         A mapping from pipeline names to ``Pipeline`` objects.
     """
     preprocess_matching_pairs = preprocessing()
+    make_match_features = make_features()
 
     
     return {
         'preprocess_matching_pairs': preprocess_matching_pairs,
-        'train_category_model': train_category_model()
+        'train_category_model': train_category_model(),
+        'make_match_features': make_match_features,
     }

@@ -1,6 +1,5 @@
 # ToDo: Version would be the tag
 FROM mapsanalytics.azurecr.io/databricks:9.1
-
 ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
@@ -26,6 +25,5 @@ RUN pip install pip-tools  \
     && pip-compile --resolver legacy /tmp/requirements.in > /tmp/requirements.txt \
     && pip install -r /tmp/requirements.txt \
     && pip install -U ipykernel
-
 
 USER $USERNAME
