@@ -29,10 +29,10 @@ df_preprocessed:
     partitionBy: ["run_id"]
     mergeSchema: True
 
-df_location_features:
+df_matching_features:
   type: spark.SparkDataSet
   file_format: parquet
-  filepath: data/04_feature/four_square/df_location_features.parquet
+  filepath: data/04_feature/four_square/df_matching_features.parquet
   load_args:
     header: True
     inferSchema: True

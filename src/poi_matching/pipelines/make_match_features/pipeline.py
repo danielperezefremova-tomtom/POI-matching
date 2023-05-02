@@ -1,6 +1,7 @@
 from kedro.pipeline import Pipeline, node, pipeline
 from .nodes import  (make_name_features,
                      make_location_features,
+                     make_category_features,
                     )
 
 
@@ -19,6 +20,12 @@ def create_pipeline(**kwargs) -> Pipeline:
                 inputs=["df_name_features", "parameters"],
                 outputs="df_location_features",
                 name="make_location_features",
+            ),
+            node(
+                func=make_category_features,
+                inputs=["df_location_features","category_model", "parameters"],
+                outputs="df_matching_features",
+                name="make_category_features",
             ),
        ]
     )

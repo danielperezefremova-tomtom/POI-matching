@@ -45,3 +45,8 @@ df_features:
     header: True
     mode: overwrite
     mergeSchema: True
+
+category_model:
+  type: pickle.PickleDataSet
+  filepath: data/06_models/rf_GG_categories_to_TT.pkl
+  backend: pickle

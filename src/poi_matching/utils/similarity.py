@@ -44,7 +44,7 @@ class SimilarityModel:
                 strings_array,
                 device=self.device,
                 batch_size=self.batch,
-                # convert_to_tensor=True,
+                convert_to_tensor=True,
             )
         except:
             raise ValueError(

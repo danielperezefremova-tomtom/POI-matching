@@ -9,6 +9,12 @@ import Levenshtein
 import phonetics
 from haversine import haversine, Unit
 import pyspark
+from poi_matching.utils.similarity import SimilarityModel
+from pyspark.sql.types import FloatType, ArrayType, StringType
+import logging 
+
+TRANSFORMER_MODEL = SimilarityModel(batch=128)
+log = logging.getLogger(__name__)
 
 def fuzzy_matching(text: str, target: str) -> float:
     """fuzzy string matching between a candidate and a target name
@@ -137,4 +143,15 @@ def make_location_features(df: pyspark.sql.DataFrame,
     df_transformed = df.withColumn('distance', udf_haversine(col('latitude_1'), col('longitude_1'), 
                                                             col('latitude_2'), col('longitude_2')))
 
+    return df_transformed
+
+def make_category_features(df: pyspark.sql.DataFrame, category_model,
+                     parameters: dict) -> pyspark.sql.DataFrame:
+    log.info(category_model)
+
+    predict_category_udf = udf(lambda x: str(category_model.predict(TRANSFORMER_MODEL.encode_string(x).reshape(1, -1))[0]))
+
+    df_transformed=df.withColumn('category_1_projection', predict_category_udf(col('category_1'))) \
+                    .withColumn('category_2_projection', predict_category_udf(col('category_2')))
+    
     return df_transformed
