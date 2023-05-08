@@ -149,9 +149,10 @@ def make_category_features(df: pyspark.sql.DataFrame, category_model,
                      parameters: dict) -> pyspark.sql.DataFrame:
     log.info(category_model)
 
-    predict_category_udf = udf(lambda x: str(category_model.predict(TRANSFORMER_MODEL.encode_string(x).reshape(1, -1))[0]))
+    #predict_category_udf = udf(lambda x: str(category_model.predict(x)))
+    udf_compute_encoding = udf(lambda x: TRANSFORMER_MODEL.encode_string(x).tolist(), ArrayType(FloatType()))
 
-    df_transformed=df.withColumn('category_1_projection', predict_category_udf(col('category_1'))) \
-                    .withColumn('category_2_projection', predict_category_udf(col('category_2')))
-    
-    return df_transformed
+    df_encoded=df.withColumn('category_1_embeding', udf_compute_encoding(col('category_1'))) \
+                    .withColumn('category_2_embeding', udf_compute_encoding(col('category_2')))    
+
+    return df_encoded
