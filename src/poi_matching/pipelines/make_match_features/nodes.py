@@ -1,8 +1,7 @@
 import numpy as np
 from rapidfuzz import fuzz
-from pyspark.sql.functions import (udf, col, levenshtein)
+from pyspark.sql.functions import (udf, col, lower)
 import phonetics
-import seaborn as sns
 import difflib
 import pylcs
 import Levenshtein
@@ -12,6 +11,8 @@ import pyspark
 from poi_matching.utils.similarity import SimilarityModel
 from pyspark.sql.types import FloatType, ArrayType, StringType
 import logging 
+import torch
+
 
 TRANSFORMER_MODEL = SimilarityModel(batch=128)
 log = logging.getLogger(__name__)
@@ -127,7 +128,9 @@ udf_haversine = udf(haversine_meters)
 def make_name_features(df: pyspark.sql.DataFrame,
                      parameters: dict) -> pyspark.sql.DataFrame:
     
-    df_transformed = df.withColumn('names_token_ratio', udf_fuzzy_token_ratio(col('name_1'), col('name_2'))) \
+    df_transformed = df.withColumn('name_1', lower(col('name_1'))) \
+                        .withColumn('name_2', lower(col('name_2'))) \
+                        .withColumn('names_token_ratio', udf_fuzzy_token_ratio(col('name_1'), col('name_2'))) \
                         .withColumn('names_ratio', udf_fuzzy_ratio(col('name_1'), col('name_2'))) \
                         .withColumn('names_token_sort_ratio', udf_token_sort_ratio(col('name_1'), col('name_2'))) \
                         .withColumn('names_partial_ratio', udf_partial_ratio(col('name_1'), col('name_2'))) \
@@ -148,11 +151,29 @@ def make_location_features(df: pyspark.sql.DataFrame,
 def make_category_features(df: pyspark.sql.DataFrame, category_model,
                      parameters: dict) -> pyspark.sql.DataFrame:
     log.info(category_model)
-
-    #predict_category_udf = udf(lambda x: str(category_model.predict(x)))
     udf_compute_encoding = udf(lambda x: TRANSFORMER_MODEL.encode_string(x).tolist(), ArrayType(FloatType()))
 
-    df_encoded=df.withColumn('category_1_embeding', udf_compute_encoding(col('category_1'))) \
+    df_encoded=df.withColumn('category_1', lower(col('category_1'))) \
+                    .withColumn('category_2', lower(col('category_2'))) \
+                    .withColumn('category_1_embeding', udf_compute_encoding(col('category_1'))) \
                     .withColumn('category_2_embeding', udf_compute_encoding(col('category_2')))    
 
     return df_encoded
+
+
+@udf(FloatType())
+def udf_cosine_sim(vector1, vector2):  # input: pd.Series; output: pd.Series
+    
+    cos_sim_instance = torch.nn.CosineSimilarity(dim=0)
+    tensor1 = torch.Tensor(vector1)
+    tensor2 = torch.Tensor(vector2)
+    
+    return round(float(cos_sim_instance(tensor1, tensor2)),2)
+
+def compute_category_similarity(df: pyspark.sql.DataFrame,
+                     parameters: dict) -> pyspark.sql.DataFrame:
+    
+    df_transformed = df.withColumn('category_semantic_similarity', udf_cosine_sim(col('category_1_embeding'),
+                                                                                col('category_2_embeding')))
+    return df_transformed
+

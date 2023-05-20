@@ -41,3 +41,16 @@ df_matching_features:
     mode: overwrite
     partitionBy: ["run_id"]
     mergeSchema: True
+
+df_semantic_features:
+  type: spark.SparkDataSet
+  file_format: parquet
+  filepath: data/04_feature/four_square/df_semantic_features.parquet
+  load_args:
+    header: True
+    inferSchema: True
+  save_args:
+    header: True
+    mode: overwrite
+    partitionBy: ["run_id"]
+    mergeSchema: True  
