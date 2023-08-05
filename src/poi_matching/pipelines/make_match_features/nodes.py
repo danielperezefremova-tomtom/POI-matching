@@ -12,7 +12,7 @@ from poi_matching.utils.similarity import SimilarityModel
 from pyspark.sql.types import FloatType, ArrayType, StringType
 import logging 
 import torch
-
+import jaro
 
 TRANSFORMER_MODEL = SimilarityModel(batch=128)
 log = logging.getLogger(__name__)
@@ -125,6 +125,34 @@ def haversine_meters(lat1, lon1, lat2, lon2):
 
 udf_haversine = udf(haversine_meters)
 
+def ngrams(sequence, n):
+    """Create ngrams from sequence, e.g. ([1,2,3], 2) -> [(1,2), (2,3)]
+       Note that fewer sequence items than n results in an empty list being returned"""
+    # credit: http://stackoverflow.com/questions/2380394/simple-implementation-of-n-gram-tf-idf-and-cosine-similarity-in-python
+    sequence = list(sequence)
+    count = max(0, len(sequence) - n + 1)
+    return [''.join(tuple(sequence[i:i+n])) for i in range(count)]
+
+def ngrams_ratio(string1, string2, int_grams=3):
+
+    string1_ngrams = set(ngrams(sequence=string1, n=int_grams))
+    string2_ngrams = set(ngrams(sequence=string2, n=int_grams))
+    if (len(string1_ngrams)==0) or (len(string1_ngrams)==0):
+        return 0
+    intersection = string1_ngrams.intersection(string2_ngrams)
+    intersection_len = len(intersection)
+
+    return 2*intersection_len / (len(string1_ngrams) + len(string2_ngrams))
+
+udf_trigrams = udf(ngrams_ratio)
+
+def jaro_winkler(string1, string2):
+    result = jaro.jaro_winkler_metric(string1, string2)
+    return result
+
+udf_jaro_winkler = udf(jaro_winkler)
+
+
 def make_name_features(df: pyspark.sql.DataFrame,
                      parameters: dict) -> pyspark.sql.DataFrame:
     
@@ -136,8 +164,10 @@ def make_name_features(df: pyspark.sql.DataFrame,
                         .withColumn('names_partial_ratio', udf_partial_ratio(col('name_1'), col('name_2'))) \
                         .withColumn('gestalt_ratio', udf_gestalt_ratio(col('name_1'), col('name_2'))) \
                         .withColumn('lcs_ratio', udf_lcs_ratio(col('name_1'), col('name_2'))) \
-                        .withColumn('metaphone_ratio', udf_metaphone_ratio(col('name_1'), col('name_2')))
-    
+                        .withColumn('metaphone_ratio', udf_metaphone_ratio(col('name_1'), col('name_2'))) \
+                        .withColumn('jaro_winkler', udf_jaro_winkler(col('name_1'), col('name_2'))) \
+                        .withColumn('trigrams_ratio', udf_trigrams(col('name_1'), col('name_2'))) \
+
     return df_transformed
 
 def make_location_features(df: pyspark.sql.DataFrame,

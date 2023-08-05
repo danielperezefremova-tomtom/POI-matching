@@ -163,6 +163,7 @@ def explode_categories(df: pyspark.sql.DataFrame,
     for column, alias in columns_map:
         df = df.withColumn(alias, explode(col(column)))
     
+    logging.info(f'Remaining rows after category explode: {df.count()}')
     return df
 
 def select_columns(df: pyspark.sql.DataFrame,
@@ -175,7 +176,7 @@ def select_columns(df: pyspark.sql.DataFrame,
 
 def filter_by_country(df: pyspark.sql.DataFrame,
                      parameters: dict) -> pyspark.sql.DataFrame:
-    
-
-    return df.filter((col('country_1').isin(parameters['filter_country'])) | (col('country_2').isin(parameters['filter_country'])))
+    df_filtered = df.filter((col('country_1').isin(parameters['filter_country'])) | (col('country_2').isin(parameters['filter_country'])))
+    logging.info(f'Remaining rows after country filter: {df_filtered.count()}')
+    return df_filtered
 
